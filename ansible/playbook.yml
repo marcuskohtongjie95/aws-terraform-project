@@ -1,0 +1,47 @@
+- name: Configure Web and App Servers
+  hosts: all
+  become: true
+  tasks:
+    # Web Server Configuration
+    - name: Update APT package index
+      apt:
+        update_cache: yes
+      when: "'web' in group_names"
+
+    - name: Install NGINX (Web Server)
+      apt:
+        name: nginx
+        state: present
+      when: "'web' in group_names"
+
+    - name: Start and enable NGINX
+      service:
+        name: nginx
+        state: started
+        enabled: true
+      when: "'web' in group_names"
+
+    # App Server Configuration
+    - name: Update APT package index
+      apt:
+        update_cache: yes
+      when: "'app' in group_names"
+
+    - name: Install MySQL Client (App Server)
+      apt:
+        name: mysql-client
+        state: present
+      when: "'app' in group_names"
+
+    - name: Install Redis (App Server)
+      apt:
+        name: redis-server
+        state: present
+      when: "'app' in group_names"
+
+    - name: Start and enable Redis
+      service:
+        name: redis-server
+        state: started
+        enabled: true
+      when: "'app' in group_names"

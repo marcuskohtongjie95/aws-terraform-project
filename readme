@@ -1,0 +1,16 @@
+#! /bin/bash
+
+#bash script to run in app server
+sudo apt update
+sudo apt install mysql-client -y
+mysql -h terraform-20241206053341684800000006.c5cmoo0msec3.us-east-1.rds.amazonaws.com -u admin -p
+
+
+
+#mysql scripts
+SELECT aws_terraform_project_db;
+SHOW TABLES;
+
+
+#ansible scripts
+ansible-playbook -i inventory.ini playbook.yml

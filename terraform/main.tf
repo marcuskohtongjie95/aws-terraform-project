@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
@@ -26,7 +22,7 @@ data "aws_key_pair" "existing" {
 
 # EC2 Instances
 resource "aws_security_group" "app_sg" {
-  name        = "app-security-group"
+  name        = "app-sg"
   description = "Allow traffic for app servers"
   vpc_id      = module.vpc.vpc_id
 
@@ -34,7 +30,7 @@ resource "aws_security_group" "app_sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion_sg.id] # Allow SSH from Bastion Host
+    security_groups = [aws_security_group.web_sg.id] # Allow SSH from Web EC2 instance
   }
 
   egress {
@@ -45,7 +41,7 @@ resource "aws_security_group" "app_sg" {
   }
 
   tags = {
-    Name = "app-security-group"
+    Name = "app-sg"
   }
 }
 
